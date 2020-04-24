@@ -124,8 +124,12 @@ You lose `r percent(1-bench_all$n[bench_all$deck=="all_sfw"]/bench_all$n[bench_a
 
 ```{r}
 bench_all %>% 
-  datatable(options =
-              list(scrollX=TRUE, scrollY="300px", pageLength=nrow(bench_all)),
+  datatable(extensions = 'ColReorder',
+            options =
+              list(scrollX=TRUE, 
+                   scrollY="300px",
+                   colReorder = TRUE,
+                   pageLength=nrow(bench_all)),
             caption = htmltools::tags$caption(
               style = 'caption-side: top; text-align: left; line-height:3.5rem; font-size:2rem',
               htmltools::strong('Default cards and SFW cards')
