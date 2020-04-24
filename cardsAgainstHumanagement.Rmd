@@ -2,7 +2,6 @@
 title: "Cards Against Humanagement"
 output: 
   html_document:
-    keep_md: yes
     code_folding: hide
     download_code: TRUE
 ---
@@ -28,7 +27,7 @@ This repo has scripts and tools for constructing and QAing custom decks to prese
 
 *Screenshot of playingcards.io configuration for Remote Insensitivity/Cards Against Humanity*
 
-![](screenshot.png)
+![](screenshots/00_ui.png)
 
 
 ```{r}
