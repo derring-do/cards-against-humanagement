@@ -29,7 +29,7 @@ This repo has scripts and tools for constructing and QAing custom decks to prese
 
 I selected the base deck and 6 expansions from the `r length(jah_dir)` available in the [json-against-humanity repo](https://github.com/crhallberg/json-against-humanity/tree/master/src) as well as my custom deck called "management." 
 
-![](01_example_rows.png)
+![](01_example_rows.PNG)
 
 # 2. Benchmark the component decks and the combined megadeck
 
@@ -40,7 +40,7 @@ Curiosities:
 1. The 2nd expansion has no non-fill-in-the-blank black cards
 1. The 6th expansion's black cards are primarily single fill-in-the-blanks as opposed to direct questions, Pick 2s, or Pick Ns
 
-![](02_benchmarks.png)
+![](02_benchmarks.PNG)
 
 ## 3. Censor cards as appropriate for norms among your intended audience
 
@@ -52,13 +52,13 @@ I made some [choices](utils.R) for job security. The regex is shoddy but false p
 
 You lose `r percent(1-bench_all$n[bench_all$deck=="all_sfw"]/bench_all$n[bench_all$deck=="all"])` of the cards from the combined deck after censoring and end up with a lower ratio of white cards.
 
-![](04_censored_benchmarks.png)
+![](04_censored_benchmarks.PNG)
 
 ## 5. See how your new cards mesh with the canonical cards
 
 This is just a way to compare/filter to see how new cards will mesh with the others.
 
-![](05_compare.png)
+![](05_compare.PNG)
 
 ## 6. Output CSVs for playingcards.io upload
 

@@ -159,7 +159,6 @@ decks_sfw %>% filter(Label=="White") %>% select(text, src) %>% datatable(filter=
 </div>
 </div>
 
-
 ## 6. Output CSVs for playingcards.io upload
 
 Instructions: http://playingcards.io/docs/overview
