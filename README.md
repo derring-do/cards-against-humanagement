@@ -29,7 +29,7 @@ This repo has scripts and tools for constructing and QAing custom decks to prese
 
 I selected the base deck and 6 expansions from the `r length(jah_dir)` available in the [json-against-humanity repo](https://github.com/crhallberg/json-against-humanity/tree/master/src) as well as my custom deck called "management." 
 
-![](screenshots/screenshots/01_example_rows.PNG)
+![](screenshots/01_example_rows.PNG)
 
 ## 2. Benchmark the component decks and the combined megadeck
 
