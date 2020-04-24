@@ -9,7 +9,7 @@ output:
 
 **Deck-building scripts for Cards Against Humanity-style games on playingcards.io**
 
-See interactive version of this page here: LINK
+See interactive version of this page here: https://derring-do.github.io/cards-against-humanagement/cardsAgainstHumanagement.html
 
 ## Background
 
