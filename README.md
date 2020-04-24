@@ -46,7 +46,7 @@ Curiosities:
 
 I made some [choices](utils.R) for job security. The regex is shoddy but false positives are better than false negatives in this case.
 
-![](03_censored.png)
+![](03_censored.PNG)
 
 ## 4. Benchmark the censored decks
 
