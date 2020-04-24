@@ -1,0 +1,3 @@
+[submodule "json-against-humanity"]
+	path = json-against-humanity
+	url = https://github.com/crhallberg/json-against-humanity.git
