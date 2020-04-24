@@ -31,7 +31,7 @@ I selected the base deck and 6 expansions from the `r length(jah_dir)` available
 
 ![](screenshots/screenshots/01_example_rows.PNG)
 
-# 2. Benchmark the component decks and the combined megadeck
+## 2. Benchmark the component decks and the combined megadeck
 
 The base deck has a 16:84 ratio of black (prompts) to white (responses) cards, while the expansions are closer to 25:75. My "management" deck is close in size to an expansion pack, but has a ratio closer to 50:50  black:white. Combined, the ratio is 24:76 which doesn't feel too disruptive but might feel different in gameplay.
 
