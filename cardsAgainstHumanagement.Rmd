@@ -1,0 +1,148 @@
+---
+title: "Cards Against Humanagement"
+output: 
+  html_document:
+    code_folding: show
+    download_code: TRUE
+    toc: TRUE
+---
+
+**Deck-building scripts for Cards Against Humanity-style games on playingcards.io**
+
+See interactive version of this page here: LINK
+
+## Background
+
+My team uses board game sessions to break up long days and keep in touch while working remotely. I adapted some of our favorites for video calls without folks having to install stuff or make new accounts.
+
+Cards Against Humanagement wrangles official Cards Against Humanity card text from REPO and then offers 1) diagnostics for balancing a deck with your custom additions; 2) file exports for uploading to [playingcards.io](http://playingcards.io/docs/overview) for instant, live multiplayer.
+
+[Business Insider has a good tutorial](https://www.businessinsider.com/cards-against-humanity-virtually-online-video-chat-how-to-play-2020-3) for configuring a game, but I was interested in crafting my supplemental cards to align with the syntactic balance of the Cards Against Humanity base deck and supplements, which [Chris Hallberg helpfully cataloged.](https://github.com/crhallberg/json-against-humanity)
+
+*Screenshot of playingcards.io configuration for Remote Insensitivity/Cards Against Humanity*
+
+![](screenshot.png)
+
+## Get selected CAH decks from json-against-humanity
+https://github.com/crhallberg/json-against-humanity/tree/master/src
+
+```{r}
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+opts_dt <- list(scrollX=TRUE)
+
+suppressPackageStartupMessages({
+  library(dplyr)
+  library(stringr)
+  library(scales)
+  library(DT)
+})
+
+source("utils.R")
+
+jah_dir    <- dir("json-against-humanity/src", full.names = TRUE)
+jah_picks  <- grep("Base\\>|CAHe", jah_dir, value=TRUE)
+custom_dir <- "custom/management"
+
+# named list makes life easier later
+decks <- c(lapply(jah_picks, import_deck) %>% setNames(basename(jah_picks)), 
+           list(management=import_deck(custom_dir, black_file="prompts.txt", white_file="responses.txt"))
+           )
+
+megadeck <- bind_rows(decks)
+
+decks <- c(decks, list(all=megadeck))
+
+# names(decks)
+
+# Benchmarks
+bench <- lapply(decks, benchmark_deck, "benchmark") %>% bind_rows %>% {.$deck <- paste0(names(decks), ""); .}
+bench_sfw <- lapply(decks, benchmark_deck, "benchmark", censor_regex=nsfw) %>% bind_rows %>% {.$deck <- paste0(names(decks), "_sfw"); .}
+bench_all <- bind_rows(bench, bench_sfw)
+
+# these are standalone but best mech to combine/mix and match?
+```
+
+The base deck has a 16:84 ratio of black to white, while the expansions are close to 25:75. 
+
+My "custom" deck is somewhere in between in size, which a 50:50 ratio. It seems like to maintain balance, you probably want a ratio closer to 25:75. 
+
+Looks like the 6th expansion's black cards are primarily single fill-in-the-blanks as opposed to questions or pick 2+s. Was this meant to rebalance the cumulative base+expansions?
+
+```{r}
+bench %>% datatable(options=opts_dt,
+                    caption = htmltools::tags$caption(
+      style = 'caption-side: top; text-align: left; line-height:3.5rem; font-size:2rem',
+      htmltools::strong('Benchmark stats for CAH decks, select expansions, my custom deck, and the cumulative megadeck')
+    )
+)
+```
+
+## Censor cards for job security
+
+Most of the CAH cards are SFW if not juvenile, but some would raise eyebrows. 
+
+```{r censored}
+nsfw_entries <- lapply(decks, benchmark_deck, "df", censor_regex=nsfw, filter_df=FALSE) %>% bind_rows %>% 
+  filter(remove == TRUE) %>% 
+  select(text, Label, src)
+
+nsfw_entries %>% 
+  datatable(
+    options=list(opts_dt, scrollY="400px"),
+    caption = htmltools::tags$caption(
+      style = 'caption-side: top; text-align: left; line-height:3.5rem; font-size:2rem',
+      htmltools::strong('NSFW text')
+    )
+  )
+```
+
+## How do deck benchmarks change after censorship?
+
+You lose 40-50% of the cards
+
+```{r}
+bench_all %>% 
+  datatable(options=opts_dt,
+    caption = htmltools::tags$caption(
+      style = 'caption-side: top; text-align: left; line-height:3.5rem; font-size:2rem',
+      htmltools::strong('Default cards and SFW cards')
+    )
+  )
+```
+
+## See how your new cards mesh with the canonical cards
+
+Here I've filtered to only my new white cards and all black cards
+
+
+<div class = "row">
+<div class = "col-md-6">
+```{r black,  warning = FALSE, echo = FALSE, dev=c('svg')}
+# constrain height and make inf scroll
+decks_sfw <- benchmark_deck(megadeck, "df", censor_regex=nsfw) %>% mutate(src=as.factor(basename(src)))
+decks_sfw %>% filter(Label=="Black") %>% select(text, src) %>% datatable(filter="top", options=list(opts_dt, scrollY="300px", pageLength=nrow(.)))
+```
+</div>
+<div class = "col-md-6">
+```{r white, warning = FALSE, echo=FALSE, dev=c('svg')}
+decks_sfw %>% filter(Label=="White") %>% select(text, src) %>% datatable(filter="top", options=list(opts_dt, scrollY="300px", pageLength=nrow(.)))
+
+# custom_whites <- decks_sfw %>% 
+#   filter(src == "custom/management" & Label == "White" | Label == "Black")
+# 
+# datatable(sample_deck(custom_whites), options=opts_dt)
+
+```
+</div>
+</div>
+
+
+## Output CSVs for playingcards.io upload
+```{r output}
+# write.csv(deck_sfw, "deck_sfw.csv", row.names = FALSE)
+# write.csv(deck_sfw %>% filter(Label == "Black") %>% select(Label, prompt), "playingcardio_prompts.csv", row.names = FALSE)
+# write.csv(deck_sfw %>% filter(Label == "White") %>% select(Label, response), "playingcardio_responses.csv", row.names = FALSE)
+```
+
+## Acknowledgements
+Thanks to the following outlets for card inspiration: Harvard Business Review, Digiday, Quartz, TechCrunch, Hubspot
