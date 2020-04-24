@@ -66,6 +66,6 @@ Instructions: http://playingcards.io/docs/overview
 
 Column names must match the card template in the UI.
 
-# 7. Configure your board and invite your friends!
+## 7. Configure your board and invite your friends!
 
 I hope this helps some R + CAH fans!
