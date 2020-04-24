@@ -2,6 +2,7 @@
 title: "Cards Against Humanagement"
 output: 
   html_document:
+    keep_md: yes
     code_folding: hide
     download_code: TRUE
 ---
